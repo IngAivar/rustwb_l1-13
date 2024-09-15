@@ -1,25 +1,29 @@
-use std::io::stdin;
+use std::io::{self, BufRead};
 
 fn main() {
-    let mut input = String::new();
-    let mut seen_lines = Vec::new();
+    
+    let stdin = io::stdin();
+    let mut lines = Vec::new();
 
-    while stdin().read_line(&mut input).unwrap() > 0 {
-        input = input.trim().to_string();
-        seen_lines.push(input.clone());
+    // Чтение строк из стандартного потока ввода
+    for line in stdin.lock().lines() {
+        let line = line.unwrap();
 
-        // Проверяем, встречалась ли эта строка ранее
-        let is_new = true;
-        for line in &seen_lines {
-            if line == &input {
-                break;
-            }
+        // Проверка на пустую строку для завершения программы
+        if line.is_empty() {
+            break;
         }
 
-        for line in seen_lines.iter() {
-            println!("{}", line);
+        // Если строка еще не встречалась, добавляем ее в вектор
+        if !lines.contains(&line) {
+            lines.push(line);
         }
+    }
 
-        input.clear();
+     println!("_________Уникальные строки_________");
+
+    // Вывод уникальных строк
+    for line in lines {
+        println!("{}", line);
     }
 }
